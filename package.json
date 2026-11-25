@@ -1,0 +1,55 @@
+{
+  "name": "dsh-reply-reader",
+  "version": "1.0.1",
+  "type": "module",
+  "description": "为 DeepSeek Harness 的助手回复添加翻译与朗读",
+  "meta": {
+    "title": "翻译与朗读",
+    "description": "逐条翻译或朗读助手回复"
+  },
+  "main": "./host/index.js",
+  "exports": {
+    ".": "./host/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "host",
+    "lib",
+    "native",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "dsh": {
+    "engines": {
+      "dsh": ">=0.2.2-rc.5"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-ui-chat",
+        "@deepseek-ai/dsh-client-ui-settings-general"
+      ]
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "~3.19.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.0",
+    "lucide-react": "0.468.0",
+    "react": "18.3.1"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:mac": "sh native/build.sh",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
