@@ -1,7 +1,9 @@
 name: Publish tagged installer
 on:
   push:
+    branches: [main]
     tags: ['v*']
+    paths: ['.github/workflows/release.yml', 'dist/*.tgz']
 permissions:
   contents: write
 jobs:
@@ -14,9 +16,9 @@ jobs:
       - name: Attach versioned installer
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -eu
           version=$(node -p "require('./package.json').version")
-          test "$RELEASE_TAG" = "v$version"
-          gh release create "$RELEASE_TAG" "dist/dsh-reply-reader-$version.tgz" --verify-tag --title "$RELEASE_TAG · 翻译与朗读" --notes '在 DSH 插件管理中选择下方 .tgz 安装包。此版本更新了翻译与朗读设置页。'
+          tag="v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then exit 0; fi
+          gh release create "$tag" "dist/dsh-reply-reader-$version.tgz" --verify-tag --title "$tag · 翻译与朗读" --notes '在 DSH 插件管理中选择下方 .tgz 安装包。此版本更新了翻译与朗读设置页。'
